@@ -8,6 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SimpleJavaHTTPServer {
 
@@ -26,7 +30,9 @@ public class SimpleJavaHTTPServer {
             ) {
                 Request request = new Request(input);
                 Response response = new Response(request);
-                response.writeTo(out);
+
+                System.out.println(response.getContentType());
+                //response.writeTo(out);
             }
         }
     }
