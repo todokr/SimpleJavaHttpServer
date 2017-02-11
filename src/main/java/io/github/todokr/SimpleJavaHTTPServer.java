@@ -8,10 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class SimpleJavaHTTPServer {
 
@@ -23,17 +19,18 @@ public class SimpleJavaHTTPServer {
         ServerSocket serverSocket = new ServerSocket(PORT);
         logger.log("HTTP Server is listening at " + PORT + "...");
 
+        RequestHandler handler = new HttpRequestHandler();
+
         while (true) {
             try (Socket socket = serverSocket.accept();
-                InputStream input = socket.getInputStream();
-                OutputStream out = socket.getOutputStream();
-            ) {
+                 InputStream input = socket.getInputStream();
+                 OutputStream out = socket.getOutputStream()) {
+                socket.setKeepAlive(false);
                 Request request = new Request(input);
-                Response response = new Response(request);
-
-                System.out.println(response.getContentType());
-                //response.writeTo(out);
+                Response response = handler.handleRequest(request);
+                response.writeTo(out);
             }
+
         }
     }
 }

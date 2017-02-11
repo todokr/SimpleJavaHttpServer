@@ -18,7 +18,6 @@ public class Response {
     private final Status status;
     private final String contentType;
     private final OffsetDateTime date;
-    private final String server = "Java Simple HTTP Server";
     private final byte[] body;
 
     public Response(Request request) throws IOException {
@@ -53,8 +52,8 @@ public class Response {
 
         String header = String.format(
             "HTTP/1.1 %s\r\n" +
-            "Content-Type: %s" +
-            "Server: Java Simple HTTP Server" +
+            "Content-Type: %s\r\n" +
+            "Server: Java Simple HTTP Server\r\n" +
             "Connection: Close\r\n" +
             "\r\n",
             this.status,
@@ -62,11 +61,7 @@ public class Response {
 
         out.write(header.getBytes());
         out.write(this.body);
+        out.flush();
     }
-
-    public String getContentType() {
-        return this.contentType;
-    }
-
 
 }
