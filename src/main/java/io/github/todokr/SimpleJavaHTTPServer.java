@@ -17,7 +17,8 @@ public class SimpleJavaHTTPServer {
         logger.log("HTTP Server is listening at " + PORT + "...");
 
         ProtocolFactory protocolFactory = new HttpProtocolFactory(); // HTTPプロトコルに則って処理を行う
-        Dispatcher dispatcher = new ThreadDispatcher(); // リクエストごとにThreadを生成するディスパッチャ
+        //Dispatcher dispatcher = new ThreadDispatcher(); // リクエストごとに無限にThreadを生成するディスパッチャ
+        Dispatcher dispatcher = new ThreadPoolDispatcher(); // スレッドプールを使うディスパッチャ
         dispatcher.startDispatching(serverSocket, logger, protocolFactory);
     }
 }

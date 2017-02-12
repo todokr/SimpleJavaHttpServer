@@ -2,6 +2,7 @@ package io.github.todokr;
 
 import java.io.*;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,7 +53,7 @@ public class HttpResponse {
         String header = String.format(
             "HTTP/1.1 %s\r\n" +
             "Content-Type: %s\r\n" +
-            "Content-Length: %d" +
+            "Content-Length: %d\r\n" +
             "Server: Java Simple HTTP Server\r\n" +
             "Connection: Close\r\n" +
             "\r\n",
@@ -60,8 +61,9 @@ public class HttpResponse {
             this.contentType,
             this.contentLength);
 
-        out.write(header.getBytes());
+        out.write(header.getBytes(StandardCharsets.UTF_8));
         out.write(this.body);
+        out.write("\r\n\r\n".getBytes(StandardCharsets.UTF_8));
         out.flush();
     }
 
