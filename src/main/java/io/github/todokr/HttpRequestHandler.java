@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class HttpRequestHandler implements RequestHandler {
 
-    public Response handleRequest(Request request) throws IOException {
-        return new Response(request);
+    public HttpResponse handleRequest(HttpRequest request) throws IOException {
+        return new HttpResponse(request);
     }
 }

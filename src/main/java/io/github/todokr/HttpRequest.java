@@ -4,14 +4,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Request {
+public class HttpRequest {
 
     private final String method;
     private final String path;
     private final String httpVersion;
     private final Map<String, String> headers;
 
-    Request(InputStream input) {
+    HttpRequest(InputStream input) {
         // TODO
         this.method = "GET";
         this.path = "/index.html";

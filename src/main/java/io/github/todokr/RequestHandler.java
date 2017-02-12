@@ -1,6 +1,8 @@
 package io.github.todokr;
 
+import java.io.IOException;
+
 public interface RequestHandler {
 
-    public Response handleRequest(Request request);
+    HttpResponse handleRequest(HttpRequest request) throws IOException;
 }

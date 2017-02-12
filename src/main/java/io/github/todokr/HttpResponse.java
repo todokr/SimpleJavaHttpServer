@@ -1,15 +1,13 @@
 package io.github.todokr;
 
 import java.io.*;
-import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.OffsetDateTime;
-import javax.activation.MimeType;
 
-public class Response {
+public class HttpResponse {
 
     private final String PUBLIC_DIR_NAME = "public";
     private final String INDEX_FILE_NAME = "index.html";
@@ -18,12 +16,12 @@ public class Response {
     private final Status status;
     private final String contentType;
     private final OffsetDateTime date;
+    private final int contentLength;
     private final byte[] body;
 
-    public Response(Request request) throws IOException {
+    public HttpResponse(HttpRequest request) throws IOException {
 
         Path path = Paths.get(PUBLIC_DIR_NAME + request.getPath()).normalize();
-        System.out.println(path);
         if (Files.isRegularFile(path)) {
           this.status = Status.OK;
         } else if (Files.isDirectory(path) && Files.isRegularFile(path.resolve(INDEX_FILE_NAME))) {
@@ -46,6 +44,7 @@ public class Response {
 
         this.date = OffsetDateTime.now();
         this.body = Files.readAllBytes(path);
+        this.contentLength = body.length;
     }
 
     public void writeTo(OutputStream out) throws IOException {
@@ -53,11 +52,13 @@ public class Response {
         String header = String.format(
             "HTTP/1.1 %s\r\n" +
             "Content-Type: %s\r\n" +
+            "Content-Length: %d" +
             "Server: Java Simple HTTP Server\r\n" +
             "Connection: Close\r\n" +
             "\r\n",
             this.status,
-            this.contentType);
+            this.contentType,
+            this.contentLength);
 
         out.write(header.getBytes());
         out.write(this.body);
