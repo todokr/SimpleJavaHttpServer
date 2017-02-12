@@ -57,7 +57,7 @@ public class HttpResponse {
             "Server: Java Simple HTTP Server\r\n" +
             "Connection: Close\r\n" +
             "\r\n",
-            this.status,
+            this.status.statusCode,
             this.contentType,
             this.contentLength);
 

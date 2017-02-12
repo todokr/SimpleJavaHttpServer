@@ -22,11 +22,10 @@ public class HttpProtocol implements Runnable {
 
     public void run() {
         try {
-            Thread.sleep(500);
             HttpRequest request = new HttpRequest(socket.getInputStream());
             HttpResponse response = requestHandler.handleRequest(request);
             response.writeTo(socket.getOutputStream());
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.log("Failed to process: " + e.getMessage());
         } finally {
             try {
