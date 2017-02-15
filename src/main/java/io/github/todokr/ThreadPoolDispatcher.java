@@ -1,15 +1,15 @@
 package io.github.todokr;
 
-import io.github.todokr.utils.Logger;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 public class ThreadPoolDispatcher implements Dispatcher {
 
     public static final int DEFAULT_POOL_SIZE = 10;
     private final int poolSize;
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     ThreadPoolDispatcher(int poolSize) {
         this.poolSize = poolSize;
@@ -19,27 +19,27 @@ public class ThreadPoolDispatcher implements Dispatcher {
         this(DEFAULT_POOL_SIZE);
     }
 
-    public void startDispatching(ServerSocket serverSocket, Logger logger, ProtocolFactory protocolFactory) {
+    public void startDispatching(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
         for (int i = 0; i < poolSize; i++) {
             Thread thread = new Thread() {
                 public void run() {
-                    dispatchLoop(serverSocket, logger, protocolFactory);
+                    dispatchLoop(serverSocket, protocolFactory);
                 }
             };
             thread.start();
-            logger.log("Thread started: " + thread.getName());
+            logger.info("Thread started: " + thread.getName());
         }
     }
 
-    private void dispatchLoop(ServerSocket serverSocket, Logger logger, ProtocolFactory protocolFactory) {
+    private void dispatchLoop(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                Runnable protocol = protocolFactory.create(socket, logger);
+                Runnable protocol = protocolFactory.create(socket);
                 protocol.run();
-                logger.log(Thread.currentThread().getName());
+                logger.info(Thread.currentThread().getName());
             } catch (IOException e) {
-                logger.log("Failed to dispatch: " + e.getMessage());
+                logger.severe("Failed to dispatch: " + e.getMessage());
             }
         }
     }

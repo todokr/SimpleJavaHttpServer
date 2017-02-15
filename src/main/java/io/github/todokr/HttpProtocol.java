@@ -2,22 +2,16 @@ package io.github.todokr;
 
 import java.io.IOException;
 import java.net.Socket;
-
-import io.github.todokr.utils.Logger;
+import java.util.logging.Logger;
 
 public class HttpProtocol implements Runnable {
 
-    private Socket socket;
-    private Logger logger;
-    private RequestHandler requestHandler;
+    private final Socket socket;
+    private final RequestHandler requestHandler = new HttpRequestHandler();
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    {
-        this.requestHandler = new HttpRequestHandler();
-    }
-
-    HttpProtocol(Socket socket, Logger logger) {
+    HttpProtocol(Socket socket) {
         this.socket = socket;
-        this.logger = logger;
     }
 
     public void run() {
@@ -26,7 +20,7 @@ public class HttpProtocol implements Runnable {
             HttpResponse response = requestHandler.handleRequest(request);
             response.writeTo(socket.getOutputStream());
         } catch (IOException e) {
-            logger.log("Failed to process: " + e.getMessage());
+            logger.severe("Failed to process: " + e.getMessage());
         } finally {
             try {
                 socket.shutdownOutput();

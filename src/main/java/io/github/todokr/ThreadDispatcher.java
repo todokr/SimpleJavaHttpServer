@@ -3,21 +3,22 @@ package io.github.todokr;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import io.github.todokr.utils.Logger;
+import java.util.logging.Logger;
 
 public class ThreadDispatcher implements Dispatcher {
 
-    public void startDispatching(ServerSocket serverSocket, Logger logger, ProtocolFactory protocolFactory) {
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+
+    public void startDispatching(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                Runnable protocol = protocolFactory.create(socket, logger);
+                Runnable protocol = protocolFactory.create(socket);
                 Thread thread = new Thread(protocol);
                 thread.start();
-                logger.log("Thread started: " + thread.getName());
+                logger.info("Thread started: " + thread.getName());
             } catch (IOException e) {
-                logger.log("Failed to dispatch: " + e.getMessage());
+                logger.severe("Failed to dispatch: " + e.getMessage());
             }
         }
     }
