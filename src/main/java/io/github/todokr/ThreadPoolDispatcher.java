@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class ThreadPoolDispatcher implements Dispatcher {
 
-    public static final int DEFAULT_POOL_SIZE = 10;
+    private static final int DEFAULT_POOL_SIZE = 10;
     private final int poolSize;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 

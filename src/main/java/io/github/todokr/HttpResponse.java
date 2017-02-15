@@ -1,19 +1,12 @@
 package io.github.todokr;
 
-import java.io.*;
-import java.net.URLConnection;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class HttpResponse {
-
-    private final String PUBLIC_DIR_NAME = "public";
-    private final String INDEX_FILE_NAME = "index.html";
-    private final String NOTFOUND_FILE_NAME = "404.html";
 
     private final Status status;
     private final String contentType;
@@ -21,33 +14,19 @@ public class HttpResponse {
     private final int contentLength;
     private final byte[] body;
 
-    public HttpResponse(HttpRequest request) throws IOException {
-
-        Path path = Paths.get(PUBLIC_DIR_NAME + request.getPath()).normalize();
-        if (Files.isRegularFile(path)) {
-          this.status = Status.OK;
-        } else if (Files.isDirectory(path) && Files.isRegularFile(path.resolve(INDEX_FILE_NAME))) {
-            path = path.resolve(INDEX_FILE_NAME);
-            this.status = Status.OK;
-        } else {
-            path = Paths.get(PUBLIC_DIR_NAME).resolve(NOTFOUND_FILE_NAME);
-            this.status = Status.NotFound;
-        }
-
-        final String mimeFromName;
-        final String mimeFromContent;
-        if ((mimeFromName = URLConnection.guessContentTypeFromName(path.toString())) != null) {
-            this.contentType = mimeFromName;
-        } else if ((mimeFromContent = URLConnection.guessContentTypeFromStream(Files.newInputStream(path))) != null) {
-            this.contentType = mimeFromContent;
-        } else {
-            this.contentType = "application/octet-stream";
-        }
-
-        this.date = OffsetDateTime.now();
-        this.body = Files.readAllBytes(path);
-        this.contentLength = body.length;
+    HttpResponse(Status status, String contentType, OffsetDateTime date, int contentLength, byte[] body){
+      this.status = status;
+      this.contentType = contentType;
+      this.date = date;
+      this.contentLength = body.length;
+      this.body = body;
     }
+
+    public Status getStatus() { return this.status; }
+    public String getContentType() { return this.contentType; }
+    public OffsetDateTime getDate() { return this.date; }
+    public int getContentLength() { return this.contentLength; }
+    public byte[] getBody() { return this.body; }
 
     public void writeTo(OutputStream out) throws IOException {
 
