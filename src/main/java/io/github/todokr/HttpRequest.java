@@ -22,9 +22,9 @@ public class HttpRequest {
         this.path        = requestLineItems[1];
         this.httpVersion = requestLineItems[2];
 
-        Pattern headerPattern = Pattern.compile("(?<key>\\S+)\\s*:\\s*(?<value>\\S+)");
+        Pattern headerPattern = Pattern.compile("^(?<key>.+):\\s*(?<value>.+)$");
         String pair = reader.readLine();
-        while (pair != null || pair.isEmpty()) {
+        while (!(pair == null || pair.isEmpty())) {
             Matcher matcher = headerPattern.matcher(pair);
             if(matcher.find()) {
                 this.headers.put(matcher.group("key"), matcher.group("value"));
