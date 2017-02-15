@@ -16,7 +16,6 @@ public class ThreadDispatcher implements Dispatcher {
                 Runnable protocol = protocolFactory.create(socket);
                 Thread thread = new Thread(protocol);
                 thread.start();
-                logger.info("Thread started: " + thread.getName());
             } catch (IOException e) {
                 logger.severe("Failed to dispatch: " + e.getMessage());
             }

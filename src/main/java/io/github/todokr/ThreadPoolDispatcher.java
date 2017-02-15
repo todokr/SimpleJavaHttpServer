@@ -27,8 +27,8 @@ public class ThreadPoolDispatcher implements Dispatcher {
                 }
             };
             thread.start();
-            logger.info("Thread started: " + thread.getName());
         }
+        logger.info(poolSize + " threads started...");
     }
 
     private void dispatchLoop(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
@@ -37,7 +37,6 @@ public class ThreadPoolDispatcher implements Dispatcher {
                 Socket socket = serverSocket.accept();
                 Runnable protocol = protocolFactory.create(socket);
                 protocol.run();
-                logger.info(Thread.currentThread().getName());
             } catch (IOException e) {
                 logger.severe("Failed to dispatch: " + e.getMessage());
             }
