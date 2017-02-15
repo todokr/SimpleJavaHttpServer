@@ -23,7 +23,7 @@ public class ThreadPoolDispatcher implements Dispatcher {
         for (int i = 0; i < poolSize; i++) {
             Thread thread = new Thread() {
                 public void run() {
-                    dispatchLoop(serverSocket, protocolFactory);
+                    repeatProcessing(serverSocket, protocolFactory);
                 }
             };
             thread.start();
@@ -31,12 +31,12 @@ public class ThreadPoolDispatcher implements Dispatcher {
         logger.info(poolSize + " threads started...");
     }
 
-    private void dispatchLoop(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
+    private void repeatProcessing(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
                 Runnable protocol = protocolFactory.create(socket);
-                protocol.run();
+                protocol.run(); // 同一スレッドでの実行させたいのでstart()ではなくrun()
             } catch (IOException e) {
                 logger.severe("Failed to dispatch: " + e.getMessage());
             }
