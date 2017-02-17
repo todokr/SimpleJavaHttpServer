@@ -1,5 +1,8 @@
 package io.github.todokr;
 
+import io.github.todokr.enums.Header;
+import io.github.todokr.enums.Status;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -10,43 +13,34 @@ public class HttpResponse {
 
     private final Status status;
     private final String contentType;
-    private final OffsetDateTime date;
+    private final OffsetDateTime lastModified;
     private final int contentLength;
     private final byte[] body;
 
-    HttpResponse(Status status, String contentType, OffsetDateTime date, int contentLength, byte[] body){
+    HttpResponse(Status status, String contentType, OffsetDateTime lastModified, byte[] body){
       this.status = status;
       this.contentType = contentType;
-      this.date = date;
+      this.lastModified = lastModified;
       this.contentLength = body.length;
       this.body = body;
     }
 
-    public Status getStatus() { return this.status; }
-    public String getContentType() { return this.contentType; }
-    public OffsetDateTime getDate() { return this.date; }
-    public int getContentLength() { return this.contentLength; }
-    public byte[] getBody() { return this.body; }
-
     public void writeTo(OutputStream out) throws IOException {
 
-        String header = String.format(
-            "HTTP/1.1 %s\r\n" +
-            "Content-Type: %s\r\n" +
-            "Content-Length: %d\r\n" +
-            "Last-Modified: %s\r\n" +
-            "Server: Java Simple HTTP Server\r\n" +
-            "Connection: Close\r\n" +
-            "\r\n",
-            this.status.statusCode,
-            this.contentType,
-            this.contentLength,
-            DateTimeFormatter.RFC_1123_DATE_TIME.format(this.date));
+        String CRLF = "\r\n";
+        DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+        String header =
+                "HTTP/1.1 " + this.status.statusCode + CRLF +
+                Header.ContentType.withValue(this.contentType) + CRLF +
+                Header.ContentLength.withValue(String.valueOf(this.contentLength)) + CRLF +
+                Header.LAST_MODIFIED.withValue(formatter.format(this.lastModified)) + CRLF +
+                Header.Server.withValue("SimpleJavaHTTPServer") + CRLF +
+                Header.Connection.withValue("Close") + CRLF +
+                CRLF;
 
         out.write(header.getBytes(StandardCharsets.UTF_8));
         out.write(this.body);
-        out.write("\r\n\r\n".getBytes(StandardCharsets.UTF_8));
+        out.write((CRLF + CRLF).getBytes(StandardCharsets.UTF_8));
         out.flush();
     }
-
 }

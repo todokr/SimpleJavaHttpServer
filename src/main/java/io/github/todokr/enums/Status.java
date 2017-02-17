@@ -1,9 +1,10 @@
-package io.github.todokr;
+package io.github.todokr.enums;
 
 public enum Status {
     OK("200 OK"),
-    NotFound("404 NotFound"),
-    InternalServerError("500 InternalServerError");
+    NOT_MODIFIED("304 NotModified"),
+    NOT_FOUND("404 NotFound"),
+    INTERNAL_SERVER_ERROR("500 InternalServerError");
 
     public final String statusCode;
 

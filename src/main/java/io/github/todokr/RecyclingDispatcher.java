@@ -5,17 +5,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-public class ThreadPoolDispatcher implements Dispatcher {
+public class RecyclingDispatcher implements Dispatcher {
 
     private static final int DEFAULT_POOL_SIZE = 10;
     private final int poolSize;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    ThreadPoolDispatcher(int poolSize) {
+    RecyclingDispatcher(int poolSize) {
         this.poolSize = poolSize;
     }
 
-    ThreadPoolDispatcher() {
+    RecyclingDispatcher() {
         this(DEFAULT_POOL_SIZE);
     }
 

@@ -22,7 +22,7 @@ public class HttpRequest {
         this.path        = requestLineItems[1];
         this.httpVersion = requestLineItems[2];
 
-        Pattern headerPattern = Pattern.compile("^(?<key>.+):\\s*(?<value>.+)$");
+        Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
         String pair = reader.readLine();
         while (!(pair == null || pair.isEmpty())) {
             Matcher matcher = headerPattern.matcher(pair);
