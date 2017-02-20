@@ -29,16 +29,17 @@ public class HttpResponse {
 
         String CRLF = "\r\n";
         DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-        String header =
-                "HTTP/1.1 " + this.status.statusCode + CRLF +
-                Header.ContentType.withValue(this.contentType) + CRLF +
-                Header.ContentLength.withValue(String.valueOf(this.contentLength)) + CRLF +
-                Header.LAST_MODIFIED.withValue(formatter.format(this.lastModified)) + CRLF +
-                Header.Server.withValue("SimpleJavaHTTPServer") + CRLF +
-                Header.Connection.withValue("Close") + CRLF +
-                CRLF;
 
-        out.write(header.getBytes(StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder();
+        sb.append("HTTP/1.1 ").append(this.status.statusCode).append(CRLF)
+          .append(Header.ContentType.withValue(this.contentType)).append(CRLF)
+          .append(Header.ContentLength.withValue(String.valueOf(this.contentLength))).append(CRLF)
+          .append(Header.LAST_MODIFIED.withValue(formatter.format(this.lastModified))).append(CRLF)
+          .append(Header.Server.withValue("SimpleJavaHTTPServer")).append(CRLF)
+          .append(Header.Connection.withValue("Close")).append(CRLF)
+          .append(CRLF);
+
+        out.write(sb.toString().getBytes(StandardCharsets.UTF_8));
         out.write(this.body);
         out.write((CRLF + CRLF).getBytes(StandardCharsets.UTF_8));
         out.flush();
