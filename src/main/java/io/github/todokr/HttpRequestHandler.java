@@ -52,11 +52,10 @@ public class HttpRequestHandler {
         final OffsetDateTime lastModified = OffsetDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()), ZoneOffset.UTC);
         final String ifModifiedSinceHeader = request.getHeader(Header.IF_MODIFIED_SINCE.key);
         final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
-        if (!(ifModifiedSinceHeader == null || lastModified.isAfter(OffsetDateTime.parse(ifModifiedSinceHeader, formatter)))) {
-            // クライアントの最終リソース取得日時が、返却するファイルの更新日時以前の場合、クライアントキャッシュを利用させるためにステータスコード304で返す
-            return new HttpResponse(Status.NOT_MODIFIED, contentType, lastModified, EMPTY_BODY);
-        } else {
+        if(ifModifiedSinceHeader == null || lastModified.isBefore(OffsetDateTime.parse(ifModifiedSinceHeader, formatter))) {
             return new HttpResponse(status, contentType, lastModified, Files.readAllBytes(path));
+        } else {
+            return new HttpResponse(Status.NOT_MODIFIED, contentType, lastModified, EMPTY_BODY);
         }
     }
 }
