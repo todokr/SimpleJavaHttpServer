@@ -11,11 +11,11 @@ import java.time.format.DateTimeFormatter;
 
 public class HttpResponse {
 
-    private final Status status;
-    private final String contentType;
-    private final OffsetDateTime lastModified;
-    private final int contentLength;
-    private final byte[] body;
+    private Status status;
+    private String contentType;
+    private OffsetDateTime lastModified;
+    private int contentLength;
+    private byte[] body;
 
     HttpResponse(Status status, String contentType, OffsetDateTime lastModified, byte[] body){
       this.status = status;

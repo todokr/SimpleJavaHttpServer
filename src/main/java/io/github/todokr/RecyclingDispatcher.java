@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 public class RecyclingDispatcher implements Dispatcher {
 
     private static final int DEFAULT_POOL_SIZE = 10;
-    private final int numberOfThread;
-    private static final Logger logger = Logger.getLogger(RecyclingDispatcher.class.getName());
+    private static Logger logger = Logger.getLogger(RecyclingDispatcher.class.getName());
+    private int numberOfThread;
 
     RecyclingDispatcher(int numberOfThread) {
         this.numberOfThread = numberOfThread;

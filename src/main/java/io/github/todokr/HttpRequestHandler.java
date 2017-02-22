@@ -24,9 +24,9 @@ public class HttpRequestHandler {
 
     public HttpResponse handleRequest(HttpRequest request) throws IOException {
 
-        final Status status;
-        final Path path;
-        final Path pathToTest = Paths.get(PUBLIC_DIR_NAME + request.getPath()).normalize();
+        Status status;
+        Path path;
+        Path pathToTest = Paths.get(PUBLIC_DIR_NAME + request.getPath()).normalize();
         if (Files.isRegularFile(pathToTest)) {
             path = pathToTest;
             status = Status.OK;
@@ -38,9 +38,9 @@ public class HttpRequestHandler {
             status = Status.NOT_FOUND;
         }
 
-        final String contentType;
-        final String mimeFromName;
-        final String mimeFromContent;
+        String contentType;
+        String mimeFromName;
+        String mimeFromContent;
         if ((mimeFromName = URLConnection.guessContentTypeFromName(path.toString())) != null) {
             contentType = mimeFromName;
         } else if ((mimeFromContent = URLConnection.guessContentTypeFromStream(Files.newInputStream(path))) != null) {
@@ -49,9 +49,9 @@ public class HttpRequestHandler {
             contentType = ContentType.OCTET_STREAM.value;
         }
 
-        final OffsetDateTime lastModified = OffsetDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()), ZoneOffset.UTC);
-        final String ifModifiedSinceHeader = request.getHeader(Header.IF_MODIFIED_SINCE.key);
-        final DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
+        OffsetDateTime lastModified = OffsetDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()), ZoneOffset.UTC);
+        String ifModifiedSinceHeader = request.getHeader(Header.IF_MODIFIED_SINCE.key);
+        DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME;
         if(ifModifiedSinceHeader == null || lastModified.isBefore(OffsetDateTime.parse(ifModifiedSinceHeader, formatter))) {
             return new HttpResponse(status, contentType, lastModified, Files.readAllBytes(path));
         } else {

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class ThreadDispatcher implements Dispatcher {
 
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private static Logger logger = Logger.getLogger(ThreadDispatcher.class.getName());
 
     public void startDispatching(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
         while (true) {

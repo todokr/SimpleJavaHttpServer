@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 
 public class HttpProtocol implements Runnable {
 
-    private final Socket socket;
-    private final HttpRequestHandler requestHandler = new HttpRequestHandler();
-    private final static Logger logger = Logger.getLogger(HttpProtocol.class.getName());
+    private Socket socket;
+    private HttpRequestHandler requestHandler = new HttpRequestHandler();
+    private static Logger logger = Logger.getLogger(HttpProtocol.class.getName());
 
     HttpProtocol(Socket socket) {
         this.socket = socket;

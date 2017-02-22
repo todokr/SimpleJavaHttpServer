@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 
 public class HttpRequest {
 
-    private final String method;
-    private final String path;
-    private final String httpVersion;
-    private final Map<String, String> headers = new HashMap<>();
+    private String method;
+    private String path;
+    private String httpVersion;
+    private Map<String, String> headers = new HashMap<>();
 
     private static Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
 
