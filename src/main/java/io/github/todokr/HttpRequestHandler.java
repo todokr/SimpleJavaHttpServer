@@ -14,7 +14,7 @@ import io.github.todokr.enums.ContentType;
 import io.github.todokr.enums.Header;
 import io.github.todokr.enums.Status;
 
-public class HttpRequestHandler implements RequestHandler {
+public class HttpRequestHandler {
 
     protected static final String PUBLIC_DIR_NAME = "public";
     protected static final String INDEX_FILE_NAME = "index.html";
