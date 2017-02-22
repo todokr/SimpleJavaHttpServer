@@ -23,8 +23,6 @@ public class HttpProtocol implements Runnable {
             logger.severe("Failed to process: " + e.getMessage());
         } finally {
             try {
-                socket.shutdownOutput();
-                socket.shutdownInput();
                 socket.close();
             } catch (IOException e) {
                 // do nothing
