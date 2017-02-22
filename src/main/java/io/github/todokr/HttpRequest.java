@@ -15,7 +15,7 @@ public class HttpRequest {
 
     HttpRequest(InputStream input) throws IOException {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(input)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
         String[] requestLineItems = reader.readLine().split("\\s+");
         this.method      = requestLineItems[0];
