@@ -8,11 +8,11 @@ import java.util.logging.Logger;
 public class RecyclingDispatcher implements Dispatcher {
 
     private static final int DEFAULT_POOL_SIZE = 10;
-    private final int poolSize;
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final int numberOfThread;
+    private static final Logger logger = Logger.getLogger(RecyclingDispatcher.class.getName());
 
-    RecyclingDispatcher(int poolSize) {
-        this.poolSize = poolSize;
+    RecyclingDispatcher(int numberOfThread) {
+        this.numberOfThread = numberOfThread;
     }
 
     RecyclingDispatcher() {
@@ -20,7 +20,7 @@ public class RecyclingDispatcher implements Dispatcher {
     }
 
     public void startDispatching(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
-        for (int i = 0; i < poolSize; i++) {
+        for (int i = 0; i < numberOfThread; i++) {
             Thread thread = new Thread() {
                 public void run() {
                     repeatProcessing(serverSocket, protocolFactory);
@@ -28,7 +28,7 @@ public class RecyclingDispatcher implements Dispatcher {
             };
             thread.start();
         }
-        logger.info(poolSize + " threads started...");
+        logger.info(numberOfThread + " threads started...");
     }
 
     private void repeatProcessing(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
@@ -36,7 +36,7 @@ public class RecyclingDispatcher implements Dispatcher {
             try {
                 Socket socket = serverSocket.accept();
                 Runnable protocol = protocolFactory.create(socket);
-                protocol.run(); // 同一スレッドでの実行させたいのでstart()ではなくrun()
+                protocol.run(); // 同一スレッドで実行させたいのでstart()ではなくrun()
             } catch (IOException e) {
                 logger.severe("Failed to dispatch: " + e.getMessage());
             }

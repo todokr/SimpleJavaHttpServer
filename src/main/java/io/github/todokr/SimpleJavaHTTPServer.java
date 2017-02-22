@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 
 public class SimpleJavaHTTPServer {
 
-    public static void main(String[] args) throws IOException {
+    private static Logger logger = Logger.getLogger(SimpleJavaHTTPServer.class.getName());
 
-        Logger logger = Logger.getLogger(SimpleJavaHTTPServer.class.getName());
+    public static void main(String[] args) throws IOException {
 
         int PORT = 8080;
         ServerSocket serverSocket = new ServerSocket(PORT);

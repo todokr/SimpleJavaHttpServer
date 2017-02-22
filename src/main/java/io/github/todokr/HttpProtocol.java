@@ -8,7 +8,7 @@ public class HttpProtocol implements Runnable {
 
     private final Socket socket;
     private final HttpRequestHandler requestHandler = new HttpRequestHandler();
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final static Logger logger = Logger.getLogger(HttpProtocol.class.getName());
 
     HttpProtocol(Socket socket) {
         this.socket = socket;

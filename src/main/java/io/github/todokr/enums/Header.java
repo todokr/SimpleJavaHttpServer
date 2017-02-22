@@ -1,11 +1,11 @@
 package io.github.todokr.enums;
 
 public enum Header {
-    ContentType("Content-Type"),
-    ContentLength("Content-Length"),
+    CONTENT_TYPE("Content-Type"),
+    CONTENT_LENGTH("Content-Length"),
     LAST_MODIFIED("Last-Modified"),
-    Connection("Connection"),
-    Server("Server"),
+    CONNECTION("Connection"),
+    SERVER("Server"),
     IF_MODIFIED_SINCE("If-Modified-Since");
 
     public final String key;

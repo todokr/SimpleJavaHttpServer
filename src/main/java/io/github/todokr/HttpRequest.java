@@ -13,40 +13,41 @@ public class HttpRequest {
     private final String httpVersion;
     private final Map<String, String> headers = new HashMap<>();
 
+    private static Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
+
     HttpRequest(InputStream input) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
         String[] requestLineItems = reader.readLine().split("\\s+");
-        this.method      = requestLineItems[0];
-        this.path        = requestLineItems[1];
-        this.httpVersion = requestLineItems[2];
+        method      = requestLineItems[0];
+        path        = requestLineItems[1];
+        httpVersion = requestLineItems[2];
 
-        Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
         String pair = reader.readLine();
         while (!(pair == null || pair.isEmpty())) {
             Matcher matcher = headerPattern.matcher(pair);
             if(matcher.find()) {
-                this.headers.put(matcher.group("key"), matcher.group("value"));
+                headers.put(matcher.group("key"), matcher.group("value"));
             }
             pair = reader.readLine();
         }
     }
 
-    String getMethod() {
-        return this.method;
+    public String getMethod() {
+        return method;
     }
 
-    String getPath() {
-        return this.path;
+    public String getPath() {
+        return path;
     }
 
-    String getHttpVersion() {
-        return this.httpVersion;
+    public String getHttpVersion() {
+        return httpVersion;
     }
 
-    String getHeader(String name) {
-        return this.headers.get(name);
+    public String getHeader(String name) {
+        return headers.get(name);
     }
 
     public Map<String, String> getHeaders() {
