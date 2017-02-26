@@ -5,11 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-public class ThreadDispatcher implements Dispatcher {
+public class ThreadDispatcher {
 
     private static Logger logger = Logger.getLogger(ThreadDispatcher.class.getName());
 
-    public void startDispatching(ServerSocket serverSocket, ProtocolFactory protocolFactory) {
+    public void startDispatching(ServerSocket serverSocket, HttpProtocolFactory protocolFactory) {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();

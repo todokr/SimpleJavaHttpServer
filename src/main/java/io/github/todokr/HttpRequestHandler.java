@@ -10,7 +10,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-import io.github.todokr.enums.ContentType;
 import io.github.todokr.enums.Header;
 import io.github.todokr.enums.Status;
 
@@ -46,7 +45,7 @@ public class HttpRequestHandler {
         } else if ((mimeFromContent = URLConnection.guessContentTypeFromStream(Files.newInputStream(path))) != null) {
             contentType = mimeFromContent;
         } else {
-            contentType = ContentType.OCTET_STREAM.value;
+            contentType = "application/octet-stream";
         }
 
         OffsetDateTime lastModified = OffsetDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()), ZoneOffset.UTC);

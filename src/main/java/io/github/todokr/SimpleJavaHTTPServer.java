@@ -12,12 +12,10 @@ public class SimpleJavaHTTPServer {
 
         int PORT = 8080;
         ServerSocket serverSocket = new ServerSocket(PORT);
-        logger.info("HTTP Server is listening at " + PORT + " \uD83C\uDF89\uD83C\uDF89\uD83C\uDF89");
+        logger.info("HTTP Server Start! Listening at " + PORT);
 
-        ProtocolFactory protocolFactory = new HttpProtocolFactory();
-        //Dispatcher dispatcher = new ThreadDispatcher(); // リクエストごとに無限にスレッドを生成するディスパッチャ
-        Dispatcher dispatcher = new RecyclingDispatcher(); // 予め生成した固定数のスレッドを再利用するディスパッチャ
+        HttpProtocolFactory protocolFactory = new HttpProtocolFactory();
+        ThreadDispatcher dispatcher = new ThreadDispatcher();
         dispatcher.startDispatching(serverSocket, protocolFactory);
-
     }
 }
