@@ -2,6 +2,7 @@ package io.github.todokr;
 
 import java.io.IOException;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +10,8 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.github.todokr.enums.Header;
 import io.github.todokr.enums.Status;
@@ -20,6 +23,7 @@ public class HttpRequestHandler {
     protected static final String NOTFOUND_FILE_NAME = "404.html";
 
     private static byte[] EMPTY_BODY = {};
+    private static Pattern textFileMimePattern = Pattern.compile("^text/.+|application/(json|xml|(x-)?javascript|ecmascript)");
 
     public HttpResponse handleRequest(HttpRequest request) throws IOException {
 
@@ -46,6 +50,12 @@ public class HttpRequestHandler {
             contentType = mimeFromContent;
         } else {
             contentType = "application/octet-stream";
+        }
+
+        Matcher textFileMatcher = textFileMimePattern.matcher(contentType);
+        if (textFileMatcher.matches()) {
+            // バイト列からエンコーディングを推定する処理を自前で用意するのは激しく面倒なのでUTF-8で決め打ち
+            contentType = contentType + ";charset=" + StandardCharsets.UTF_8.name();
         }
 
         OffsetDateTime lastModified = OffsetDateTime.ofInstant(Instant.ofEpochMilli(path.toFile().lastModified()), ZoneOffset.UTC);
