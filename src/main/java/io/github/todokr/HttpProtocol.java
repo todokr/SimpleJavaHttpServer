@@ -16,18 +16,12 @@ public class HttpProtocol implements Runnable {
     }
 
     public void run() {
-        try {
-            HttpRequest request = new HttpRequest(socket.getInputStream());
+        try (Socket s = socket) {
+            HttpRequest request = new HttpRequest(s.getInputStream());
             HttpResponse response = requestHandler.handleRequest(request);
-            response.writeTo(socket.getOutputStream());
+            response.writeTo(s.getOutputStream());
         } catch (IOException e) {
             logger.error("Failed to process: " + e.getMessage());
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                // do nothing
-            }
         }
     }
 }

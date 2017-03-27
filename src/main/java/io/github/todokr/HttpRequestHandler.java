@@ -1,6 +1,7 @@
 package io.github.todokr;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,10 +52,14 @@ public class HttpRequestHandler {
         String mimeFromContent;
         if ((mimeFromName = URLConnection.guessContentTypeFromName(path.toString())) != null) {
             contentType = mimeFromName;
-        } else if ((mimeFromContent = URLConnection.guessContentTypeFromStream(Files.newInputStream(path))) != null) {
-            contentType = mimeFromContent;
         } else {
-            contentType = "application/octet-stream";
+            try (InputStream in = Files.newInputStream(path)) {
+                if ((mimeFromContent = URLConnection.guessContentTypeFromStream(in)) != null) {
+                    contentType = mimeFromContent;
+                } else {
+                    contentType = "application/octet-stream";
+                }
+            }
         }
 
         Matcher textFileMatcher = textFileMimePattern.matcher(contentType);
