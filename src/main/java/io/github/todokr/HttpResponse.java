@@ -41,7 +41,6 @@ public class HttpResponse {
 
         out.write(sb.toString().getBytes(StandardCharsets.UTF_8));
         out.write(body);
-        out.write((CRLF + CRLF).getBytes(StandardCharsets.UTF_8));
         out.flush();
     }
 }

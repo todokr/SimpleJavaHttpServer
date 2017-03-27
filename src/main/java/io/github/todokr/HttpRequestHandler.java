@@ -18,8 +18,9 @@ import io.github.todokr.enums.Status;
 
 public class HttpRequestHandler {
 
-    protected static final String PUBLIC_DIR_NAME = "public";
+    protected static final Path PUBLIC_DIR_PATH = Paths.get("public").toAbsolutePath();
     protected static final String INDEX_FILE_NAME = "index.html";
+    protected static final String FORBIDDEN_FILE_NAME = "403.html";
     protected static final String NOTFOUND_FILE_NAME = "404.html";
 
     private static byte[] EMPTY_BODY = {};
@@ -29,15 +30,19 @@ public class HttpRequestHandler {
 
         Status status;
         Path path;
-        Path pathToTest = Paths.get(PUBLIC_DIR_NAME + request.getPath()).normalize();
-        if (Files.isRegularFile(pathToTest)) {
+        Path pathToTest = Paths.get(PUBLIC_DIR_PATH.toString(), request.getPath()).normalize();
+
+        if (!pathToTest.startsWith(PUBLIC_DIR_PATH)) { // ディレクトリトラバーサル防止
+            path = PUBLIC_DIR_PATH.resolve(FORBIDDEN_FILE_NAME);
+            status = Status.FORBIDDEN;
+        } else if (Files.isRegularFile(pathToTest)) {
             path = pathToTest;
             status = Status.OK;
         } else if (Files.isDirectory(pathToTest) && Files.isRegularFile(pathToTest.resolve(INDEX_FILE_NAME))) {
             path = pathToTest.resolve(INDEX_FILE_NAME);
             status = Status.OK;
         } else {
-            path = Paths.get(PUBLIC_DIR_NAME).resolve(NOTFOUND_FILE_NAME);
+            path = PUBLIC_DIR_PATH.resolve(NOTFOUND_FILE_NAME);
             status = Status.NOT_FOUND;
         }
 
