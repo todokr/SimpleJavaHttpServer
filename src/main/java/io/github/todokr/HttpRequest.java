@@ -18,19 +18,22 @@ public class HttpRequest {
     HttpRequest(InputStream input) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        String requestLine = reader.readLine();
 
-        String[] requestLineItems = reader.readLine().split("\\s+");
-        method      = requestLineItems[0];
-        path        = requestLineItems[1];
-        httpVersion = requestLineItems[2];
+        if (requestLine != null) {
+            String[] requestLineItems = requestLine.split("\\s+");
+            method      = requestLineItems[0];
+            path        = requestLineItems[1];
+            httpVersion = requestLineItems[2];
 
-        String pair = reader.readLine();
-        while (!(pair == null || pair.isEmpty())) {
-            Matcher matcher = headerPattern.matcher(pair);
-            if(matcher.find()) {
-                headers.put(matcher.group("key"), matcher.group("value"));
+            String pair = reader.readLine();
+            while (!(pair == null || pair.isEmpty())) {
+                Matcher matcher = headerPattern.matcher(pair);
+                if(matcher.find()) {
+                    headers.put(matcher.group("key"), matcher.group("value"));
+                }
+                pair = reader.readLine();
             }
-            pair = reader.readLine();
         }
     }
 

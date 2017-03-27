@@ -1,13 +1,13 @@
 package io.github.todokr;
 
-import io.github.todokr.enums.Header;
-import io.github.todokr.enums.Status;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+
+import io.github.todokr.enums.Header;
+import io.github.todokr.enums.Status;
 
 public class HttpResponse {
 
