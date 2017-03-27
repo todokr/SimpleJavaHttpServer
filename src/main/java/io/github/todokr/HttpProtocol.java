@@ -11,7 +11,7 @@ public class HttpProtocol implements Runnable {
     private Socket socket;
     private HttpRequestHandler requestHandler = new HttpRequestHandler();
 
-    HttpProtocol(Socket socket) {
+    public HttpProtocol(Socket socket) {
         this.socket = socket;
     }
 

@@ -18,7 +18,7 @@ public class HttpRequest {
     private static Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
     private static Logger logger = new Logger(HttpRequest.class.getSimpleName());
 
-    HttpRequest(InputStream input) throws IOException {
+    public HttpRequest(InputStream input) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         String requestLine = reader.readLine();

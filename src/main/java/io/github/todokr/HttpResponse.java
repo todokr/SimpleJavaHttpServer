@@ -17,7 +17,7 @@ public class HttpResponse {
     private int contentLength;
     private byte[] body;
 
-    HttpResponse(Status status, String contentType, OffsetDateTime lastModified, byte[] body){
+    public HttpResponse(Status status, String contentType, OffsetDateTime lastModified, byte[] body){
       this.status = status;
       this.contentType = contentType;
       this.lastModified = lastModified;
