@@ -1,5 +1,7 @@
 package io.github.todokr;
 
+import io.github.todokr.utils.Logger;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,7 @@ public class HttpRequest {
     private Map<String, String> headers = new HashMap<>();
 
     private static Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
+    private static Logger logger = new Logger(HttpRequest.class.getSimpleName());
 
     HttpRequest(InputStream input) throws IOException {
 
@@ -21,6 +24,7 @@ public class HttpRequest {
         String requestLine = reader.readLine();
 
         if (requestLine != null) {
+            logger.log(requestLine);
             String[] requestLineItems = requestLine.split("\\s+");
             method      = requestLineItems[0];
             path        = requestLineItems[1];

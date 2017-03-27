@@ -1,19 +1,20 @@
 package io.github.todokr;
 
+import io.github.todokr.utils.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Logger;
 
 public class SimpleJavaHTTPServer {
 
-    private static Logger logger = Logger.getLogger(SimpleJavaHTTPServer.class.getName());
+    private static Logger logger = new Logger(SimpleJavaHTTPServer.class.getSimpleName());
+    private static int PORT = 8080;
 
     public static void main(String[] args) throws IOException {
 
-        int PORT = 8080;
         ServerSocket serverSocket = new ServerSocket(PORT);
-        logger.info("HTTP Server Start! Listening at " + PORT);
+        logger.log("HTTP Server Start! Listening at " + PORT + "!");
 
         while (true) {
             try {
@@ -21,7 +22,7 @@ public class SimpleJavaHTTPServer {
                 Thread thread = new Thread(new HttpProtocol(socket));
                 thread.start();
             } catch (IOException e) {
-                logger.severe("Failed to dispatch: " + e.getMessage());
+                logger.error("Failed to dispatch: " + e.getMessage());
             }
         }
     }
