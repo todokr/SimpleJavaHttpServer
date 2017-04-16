@@ -3,6 +3,9 @@ package io.github.todokr;
 import io.github.todokr.utils.Logger;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -18,9 +21,11 @@ public class HttpRequest {
     private static Pattern headerPattern = Pattern.compile("^(?<key>.+?):\\s*(?<value>.+)$");
     private static Logger logger = new Logger(HttpRequest.class.getSimpleName());
 
-    public HttpRequest(InputStream input) throws IOException {
+    public HttpRequest(ByteBuffer buff) throws IOException {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        byte[] byteArray = new byte[buff.remaining()];
+        buff.get(byteArray);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(byteArray)));
         String requestLine = reader.readLine();
 
         if (requestLine != null) {

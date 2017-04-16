@@ -28,7 +28,6 @@ public class HttpRequestHandler {
     private static Pattern textFileMimePattern = Pattern.compile("^text/.+|application/(json|xml|(x-)?javascript|ecmascript)");
 
     public HttpResponse handleRequest(HttpRequest request) throws IOException {
-
         Status status;
         Path path;
         Path pathToTest = Paths.get(PUBLIC_DIR_PATH.toString(), request.getPath()).normalize();
